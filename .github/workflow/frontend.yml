@@ -1,0 +1,37 @@
+# .github/workflows/frontend.yml
+name: Frontend CI
+
+on:
+  push:
+    branches: [Feature/PBT-FE-main]
+  pull_request:
+    branches: [Feature/PBT-FE-main]
+
+jobs:
+  frontend-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install Frontend Dependencies
+        working-directory: client
+        run: pnpm install
+
+      - name: Build Frontend
+        working-directory: client
+        run: pnpm build
+
+      - name: Lint Frontend
+        working-directory: client
+        run: pnpm lint
